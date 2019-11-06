@@ -1,0 +1,30 @@
+version: '3'
+services:
+    arch:
+        build: .
+        image: viviridian/archdev
+        container_name: arch
+        hostname: arch_container
+        volumes:
+          #- ./launch.sh:/launch.sh:ro
+          #- ./user_launch.sh:/user_launch.sh:ro
+          - /home/vivlim/.ssh:/home/vivlim/.ssh:ro
+          - /home/vivlim:/home/vivlim/external
+          - home:/home/vivlim
+          - ssh_server_keys:/etc/ssh/keys
+        restart: unless-stopped
+        ports:
+          - "7722:22"
+    postgres_db:
+        image: postgres
+        restart: unless-stopped
+        environment:
+          POSTGRES_PASSWORD: secret
+          PGDATA: /pgdata
+        volumes:
+          - ./data/postgres:/pgdata
+        
+
+volumes:
+    ssh_server_keys:
+    home:
