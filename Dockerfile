@@ -1,5 +1,9 @@
-FROM archlinux/base:latest
+FROM archlinux:latest
 MAINTAINER viviridian <dev@vvn.space>
+
+# init keys
+RUN pacman -Sy --noconfirm archlinux-keyring \
+  && rm -rf /etc/pacman.d/gnupg/* && pacman-key --init && pacman-key --populate archlinux
 
 # update packages
 RUN pacman -Syu --noconfirm \
@@ -22,16 +26,8 @@ RUN pacman -Syu --noconfirm \
 # delete user's password so sudo won't prompt for it
   && passwd -d vivlim \
 # basic tools
-  && pacman -S vim git zsh base-devel man-db tmux vi --noconfirm \
-# install an aur helper
-  && cd /tmp \
-  && git clone https://aur.archlinux.org/yay.git \
-  && chown vivlim yay \
-  && cd yay \
-  && sudo -u vivlim makepkg -si --noconfirm \
-  && cd / \
-  && rm -rf /tmp/yay \
-# clean cache
+  && pacman -S neovim git zsh base base-devel iputils inotify-tools lazygit man-db tmux vi --noconfirm \
+# clean up cache
   && pacman -Scc --noconfirm
 
 # oh-my-zsh
@@ -39,21 +35,21 @@ RUN su vivlim -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh
   && chsh -s /usr/bin/zsh vivlim
 
 # aur packages
-RUN su vivlim -c "yay -S --noconfirm --cleanafter vcsh myrepos"
+#RUN su vivlim -c "yay -S --noconfirm --cleanafter vcsh myrepos"
 
 # remove .zshrc because the config will overwrite it.
 RUN rm /home/vivlim/.zshrc
 
 # Install languages: python, js, rust, elixir
-RUN pacman --noconfirm -Sy npm python-pipenv elixir \
-  && pacman -Scc --noconfirm
+#RUN pacman --noconfirm -Sy npm python-pipenv elixir \
+  #&& pacman -Scc --noconfirm
 
 # patch on some more packages I forgot to add before (if rebuilding, merge up!)
-RUN pacman --noconfirm -Sy base iputils inotify-tools \
-  && pacman -Scc --noconfirm
+#RUN pacman --noconfirm -Sy base iputils inotify-tools \
+  #&& pacman -Scc --noconfirm
 
-COPY launch.sh /launch.sh
-COPY user_launch.sh /user_launch.sh
+ADD launch.sh /launch.sh
+ADD user_launch.sh /user_launch.sh
 
 EXPOSE 22
 CMD ["/launch.sh"]
