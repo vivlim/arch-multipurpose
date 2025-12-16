@@ -1,0 +1,39 @@
+[[language]]
+name = "python"
+auto-format = true
+language-servers = [
+    {name = "pyright"},
+    {name = "ruff"},
+]
+
+[language-server.pyright]
+command = "pyright-langserver"
+args = ["--stdio"]
+
+[language-server.ruff]
+command = "ruff"
+args = ["server"]
+
+[[language]]
+name = "typescript"
+auto-format = true
+language-servers = ["typescript-language-server"]
+
+[[language]]
+name = "javascript"
+auto-format = true
+language-servers = ["typescript-language-server"]
+
+[[language]]
+name = "tsx"
+auto-format = true
+language-servers = ["typescript-language-server"]
+
+[[language]]
+name = "jsx"
+auto-format = true
+language-servers = ["typescript-language-server"]
+
+[language-server.typescript-language-server]
+command = "typescript-language-server"
+args = ["--stdio"]

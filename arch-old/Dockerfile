@@ -48,8 +48,8 @@ RUN rm /home/vivlim/.zshrc
 #RUN pacman --noconfirm -Sy base iputils inotify-tools \
   #&& pacman -Scc --noconfirm
 
-ADD launch.sh /launch.sh
-ADD user_launch.sh /user_launch.sh
+ADD arch-old/launch.sh /launch.sh
+ADD arch-old/user_launch.sh /user_launch.sh
 
 EXPOSE 22
 CMD ["/launch.sh"]
